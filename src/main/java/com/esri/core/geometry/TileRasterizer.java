@@ -4,8 +4,8 @@ import xyz.TileCalculator;
 
 import javax.imageio.ImageIO;
 import java.awt.image.*;
-import java.io.IOException;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 
 /**
@@ -13,14 +13,31 @@ import java.io.ByteArrayOutputStream;
  *
  * Created by willtemperley@gmail.com on 20-Oct-16.
  */
-public class PolygonRasterizer {
+public class TileRasterizer {
 
-    SimpleRasterizer rasterizer = new SimpleRasterizer();
+    private final TileCalculator.Tile tile;
+
     final Transformation2D trans = new Transformation2D();
 
     private static int width = 256;
     private static int height = 256;
+    private final ScanCallback scanCallBack = new ScanCallback(width, height);
 
+    public TileRasterizer(TileCalculator.Tile tile) {
+        this.tile = tile;
+        trans.setIdentity(); //reset
+        Envelope2D envelope2D = tile.getEnvelope();
+
+        double xx = -envelope2D.xmin;
+        double yy = -envelope2D.ymin;
+        trans.shift(xx, yy);
+        double scale = tile.getScale();
+        trans.scale(scale, scale);
+    }
+
+    /**
+     *
+     */
     private static class ScanCallback implements SimpleRasterizer.ScanCallback {
 
         private final int width;
@@ -31,7 +48,6 @@ public class PolygonRasterizer {
         public void setBurnValue(int burnValue) {
             this.burnValue = burnValue;
         }
-
 
         ScanCallback(int width, int height) {
             this.width = width;
@@ -52,7 +68,7 @@ public class PolygonRasterizer {
             Need to  burn values between x1 and x2 on the inverted y coordinate
              */
             for (int i = 0; i < scans.length; i+=3) {
-                int y = PolygonRasterizer.height - scans[i+2] - 1;// image coordinates
+                int y = TileRasterizer.height - scans[i+2] - 1;// image coordinates
                 int offset = y * width;
 
                 for (int scanLineX = scans[i]; scanLineX < scans[i+1]; scanLineX++) {
@@ -88,33 +104,18 @@ public class PolygonRasterizer {
         }
     }
 
-    public void fillEnv(Polygon polygon) {
+
+    /*
+    Todo: test!!
+    This is a slightly different approach: keep filling up the tile and extract the info when you want it
+     */
+    public void rasterizePolygon(Polygon polygon) {
+
+        //todo: can this be re-used?
+        SimpleRasterizer rasterizer = new SimpleRasterizer();
         Envelope2D env = new Envelope2D();
         polygon.queryEnvelope2D(env);
 
-        ScanCallback scanCallBack = new ScanCallback(width, height);
-
-        rasterizer.setup(width, height, scanCallBack);
-
-        rasterizer.fillEnvelope(env);
-        rasterizer.flush();
-    }
-
-    public byte[] rasterizeTile(Polygon polygon, TileCalculator.Tile tile) {
-
-        trans.setIdentity(); //reset
-        Envelope2D envelope2D = tile.getEnvelope();
-
-        double xx = -envelope2D.xmin;
-        double yy = -envelope2D.ymin;
-        trans.shift(xx, yy);
-        double scale = tile.getScale();
-        trans.scale(scale, scale);
-
-        Envelope2D env = new Envelope2D();
-        polygon.queryEnvelope2D(env);
-
-        ScanCallback scanCallBack = new ScanCallback(width, height);
         rasterizer.setup(width, height, scanCallBack);
 
         SegmentIterator segIter = polygon.querySegmentIterator();
@@ -135,6 +136,9 @@ public class PolygonRasterizer {
 
         rasterizer.flush();
 
+    }
+
+    public byte[] getImage() {
         return scanCallBack.getImage();
     }
 
