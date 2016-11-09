@@ -8,6 +8,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import static xyz.TestUtil.writeDebugTile;
+
 /**
  * Created by willtemperley@gmail.com on 25-Oct-16.
  */
@@ -76,12 +78,5 @@ public class RasterizeTest {
 
     }
 
-    private void writeDebugTile(TileCalculator.Tile tile, byte[] bytes) throws IOException {
-        File f = new File("e:/tmp/ras/" + tile.toString() + ".png");
-        FileOutputStream fileOutputStream = new FileOutputStream(f);
-        for (byte aByte : bytes) {
-            fileOutputStream.write(aByte);
-        }
-    }
 
 }
