@@ -3,6 +3,7 @@ package xyz;
 import com.esri.core.geometry.Envelope2D;
 import com.esri.core.geometry.Polygon;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +24,31 @@ public class TileCalculator {
         public Tile(int x, int y, int z) {
             this.x = x;
             this.y = y;
-            this.z = z; //fixme needed?? usually know it
+            this.z = z;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof Tile)) {
+                return false;
+            }
+            Tile tile = (Tile) o;
+            return x == tile.x && y == tile.y && z == tile.z;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = x;
+            result = 31 * result + y;
+            result = 31 * result + z;
+            return result;
+        }
+        //        @Override
+//        public boolean equals(Object obj) {
+//        }
 
         public Envelope2D getEnvelope() {
             Envelope2D envelope2D = new Envelope2D();
@@ -87,7 +111,7 @@ public class TileCalculator {
     }
 
 
-    public Tile getTile(Double lon, Double lat, int zoom) {
+    public static Tile getTile(Double lon, Double lat, int zoom) {
         /*
          * Looking for the first tile from left
          */
@@ -101,7 +125,20 @@ public class TileCalculator {
         return new Tile(Xt, Yt, zoom);
     }
 
-    public List<Tile> tilesForEnvelope(Envelope2D env, int zoom) {
+    public static byte[] encodeTile(Tile tile) {
+        ByteBuffer buffer = ByteBuffer.wrap(new byte[12]);
+        buffer.putInt(tile.x);
+        buffer.putInt(tile.y);
+        buffer.putInt(tile.z);
+        return buffer.array();
+    }
+
+    public static Tile decodeTile(byte[] encodedTile) {
+        ByteBuffer buffer = ByteBuffer.wrap(encodedTile);
+        return new Tile(buffer.getInt(), buffer.getInt(), buffer.getInt());
+    }
+
+    public static List<Tile> tilesForEnvelope(Envelope2D env, int zoom) {
 
         double xmin = env.xmin;
         double ymin = env.ymin;
