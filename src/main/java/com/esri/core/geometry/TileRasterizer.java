@@ -2,11 +2,6 @@ package com.esri.core.geometry;
 
 import xyz.TileCalculator;
 
-import javax.imageio.ImageIO;
-import java.awt.image.*;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
 
 /**
  * Package-private members can only be accessed from here
@@ -15,16 +10,15 @@ import java.io.IOException;
  */
 public class TileRasterizer {
 
-    private final TileCalculator.Tile tile;
 
     final Transformation2D trans = new Transformation2D();
 
-    private static int width = 256;
-    private static int height = 256;
-    private final ScanCallback scanCallBack = new ScanCallback(width, height);
+//    private static int width = 256;
+//    private static int height = 256;
+    private final TileScanCallback scanCallback;// = new IntbackedScanCallback(width, height);
 
-    public TileRasterizer(TileCalculator.Tile tile) {
-        this.tile = tile;
+    public TileRasterizer(TileCalculator.Tile tile, TileScanCallback scanCallback) {
+        this.scanCallback = scanCallback;
         trans.setIdentity(); //reset
         Envelope2D envelope2D = tile.getEnvelope();
 
@@ -33,75 +27,6 @@ public class TileRasterizer {
         trans.shift(xx, yy);
         double scale = tile.getScale();
         trans.scale(scale, scale);
-    }
-
-    /**
-     *
-     */
-    private static class ScanCallback implements SimpleRasterizer.ScanCallback {
-
-        private final int width;
-        private final int height;
-        private final int[] matrix;
-        private int burnValue = getPackedRGBA(128, 128, 128, 128); //grey
-
-        public void setBurnValue(int burnValue) {
-            this.burnValue = burnValue;
-        }
-
-        ScanCallback(int width, int height) {
-            this.width = width;
-            this.height = height;
-            this.matrix = new int[width * height];
-            int background = getPackedRGBA(128, 0, 0, 0); //black
-            for (int i = 0; i < matrix.length; i++) {
-                matrix[i] = background;
-            }
-        }
-
-        @Override
-        public void drawScan(int[] scans, int scanCount) {
-
-
-            /*
-            Scanlines come in triplets - x1, x2 and the y coord
-            Need to  burn values between x1 and x2 on the inverted y coordinate
-             */
-            for (int i = 0; i < scans.length; i+=3) {
-                int y = TileRasterizer.height - scans[i+2] - 1;// image coordinates
-                int offset = y * width;
-
-                for (int scanLineX = scans[i]; scanLineX < scans[i+1]; scanLineX++) {
-                    matrix[offset + scanLineX] = burnValue;
-                }
-            }
-
-        }
-
-        public int getPackedRGBA(int a, int r, int g, int b) {
-            return (a & 255) << 24 | (r & 255) << 16 | (g & 255) << 8 | (b & 255);
-        }
-
-        public byte[] getImage() {
-
-            DataBufferInt buffer = new DataBufferInt(matrix, matrix.length);
-
-            int[] bandMasks = {0xFF0000, 0xFF00, 0xFF, 0xFF000000}; // ARGB (yes, ARGB, as the masks are R, G, B, A always) order
-            WritableRaster raster = Raster.createPackedRaster(buffer, width, height, width, bandMasks, null);
-
-            ColorModel cm = ColorModel.getRGBdefault();
-            BufferedImage image = new BufferedImage(cm, raster, cm.isAlphaPremultiplied(), null);
-
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-            try {
-                ImageIO.write(image, "PNG", byteArrayOutputStream);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return byteArrayOutputStream.toByteArray();
-        }
     }
 
 
@@ -116,7 +41,7 @@ public class TileRasterizer {
         Envelope2D env = new Envelope2D();
         polygon.queryEnvelope2D(env);
 
-        rasterizer.setup(width, height, scanCallBack);
+        rasterizer.setup(scanCallback.getWidth(), scanCallback.getHeight(), scanCallback);
 
         SegmentIterator segIter = polygon.querySegmentIterator();
         Point2D p1 = new Point2D();
@@ -139,7 +64,10 @@ public class TileRasterizer {
     }
 
     public byte[] getImage() {
-        return scanCallBack.getImage();
+        return scanCallback.getImage();
     }
 
+    public byte[] getBitset() {
+        return scanCallback.getBitSet();
+    }
 }

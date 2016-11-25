@@ -8,11 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Tile which knows how to encode itself with HBase-friendly keys
+ *
  * Created by willtemperley@gmail.com on 24-Oct-16.
  */
 public class TileCalculator {
 
     public static class Tile {
+
+        public static byte[] cf = "d".getBytes();
+        public static byte[] cimg = "i".getBytes();
 
         private static final int w = 256;
         private static final int h = 256;
@@ -26,6 +31,41 @@ public class TileCalculator {
             this.y = y;
             this.z = z;
         }
+
+        final int readLittleEndianInt(byte[] bytes) {
+            int ch4 = bytes[0];
+            int ch3 = bytes[1];
+            int ch2 = bytes[2];
+            int ch1 = bytes[3];
+            return ((ch1 << 24) + (ch2 << 16) + (ch3 << 8) + (ch4));
+        }
+
+        public Tile(byte[] encodedTile) {
+            ByteBuffer buffer = ByteBuffer.wrap(encodedTile);
+
+            byte[] dst = new byte[4];
+            buffer.get(dst);
+            this.x = readLittleEndianInt(dst);
+            this.y = buffer.getInt();
+            this.z = buffer.getInt();
+
+        }
+
+        public byte[] encode() {
+
+            ByteBuffer buffer = ByteBuffer.wrap(new byte[12]);
+
+            //reverse order of first four bytes, as the x coordinate is stored in little endian form
+            buffer.put((byte)(x));
+            buffer.put((byte)(x >>>  8));
+            buffer.put((byte)(x >>> 16));
+            buffer.put((byte)(x >>> 24));
+
+            buffer.putInt(this.y);
+            buffer.putInt(this.z);
+            return buffer.array();
+        }
+
 
         @Override
         public boolean equals(Object o) {
@@ -46,9 +86,6 @@ public class TileCalculator {
             result = 31 * result + z;
             return result;
         }
-        //        @Override
-//        public boolean equals(Object obj) {
-//        }
 
         public Envelope2D getEnvelope() {
             Envelope2D envelope2D = new Envelope2D();
@@ -74,18 +111,9 @@ public class TileCalculator {
 
         public double getScale() {
 
-            double x = getX(this.x);
+            double x0 = getX(this.x);
             double x1 = getX(this.x + 1);
-
-            return w / (x1 - x);
-        }
-
-        /**
-         * Todo: temporary tile id. boxed on purpose.
-         * @return
-         */
-        public Integer[] getId() {
-            return new Integer[]{x, y, z};
+            return w / (x1 - x0);
         }
 
         @Override
@@ -125,18 +153,6 @@ public class TileCalculator {
         return new Tile(Xt, Yt, zoom);
     }
 
-    public static byte[] encodeTile(Tile tile) {
-        ByteBuffer buffer = ByteBuffer.wrap(new byte[12]);
-        buffer.putInt(tile.x);
-        buffer.putInt(tile.y);
-        buffer.putInt(tile.z);
-        return buffer.array();
-    }
-
-    public static Tile decodeTile(byte[] encodedTile) {
-        ByteBuffer buffer = ByteBuffer.wrap(encodedTile);
-        return new Tile(buffer.getInt(), buffer.getInt(), buffer.getInt());
-    }
 
     public static List<Tile> tilesForEnvelope(Envelope2D env, int zoom) {
 

@@ -67,24 +67,7 @@ public class PolygonRasterizer {
         }
 
         public byte[] getImage() {
-
-            DataBufferInt buffer = new DataBufferInt(matrix, matrix.length);
-
-            int[] bandMasks = {0xFF0000, 0xFF00, 0xFF, 0xFF000000}; // ARGB (yes, ARGB, as the masks are R, G, B, A always) order
-            WritableRaster raster = Raster.createPackedRaster(buffer, width, height, width, bandMasks, null);
-
-            ColorModel cm = ColorModel.getRGBdefault();
-            BufferedImage image = new BufferedImage(cm, raster, cm.isAlphaPremultiplied(), null);
-
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-            try {
-                ImageIO.write(image, "PNG", byteArrayOutputStream);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return byteArrayOutputStream.toByteArray();
+            return BinaryImage.getImage(matrix, width, height);
         }
     }
 

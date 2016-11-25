@@ -15,17 +15,6 @@ public class TileCalculatorTest {
     private TileCalculator tileCalculator = new TileCalculator();
 
     @Test
-    public void testTileEncoding() {
-
-        TileCalculator.Tile tile = new TileCalculator.Tile(1,2,3);
-
-        byte[] bytes = TileCalculator.encodeTile(tile);
-        TileCalculator.Tile decodedTile = TileCalculator.decodeTile(bytes);
-
-        assertTrue(tile.equals(decodedTile));
-    }
-
-    @Test
     public void testMadagascar() {
 
         MapGeometry madagascar = TestResources.getMadagascar();

@@ -30,13 +30,13 @@ public class TestResources {
         return new File(classLoader.getResource(fn).getPath());
     }
 
-    public static List<Polygon> getTiles() {
+    public static List<Polygon> getTiles(Geometry.Type geomType) {
 
         List<String> lines = getLinesFromFile("madagascar.z6.wkt");
         List<Polygon> polygons = new ArrayList<>(lines.size());
         for (String line : lines) {
             //todo: if you ask for polygons, you should get polygons
-            Geometry g = fromWkt.execute(0, Geometry.Type.Polygon, line, null);
+            Geometry g = fromWkt.execute(0, geomType, line, null);
             polygons.add((Polygon) g);
 
         }
@@ -58,6 +58,18 @@ public class TestResources {
         List<String> lines = getLinesFromFile("madagascar.geo.json");
         try {
             return fromGeoJson(lines.get(0));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public static MapGeometry getUkWiggle() {
+
+        List<String> lines = getLinesFromFile("ukwiggle.json");
+        try {
+            String json = lines.get(0);
+            return fromGeoJson.execute(0, Geometry.Type.Polyline, json, null);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
