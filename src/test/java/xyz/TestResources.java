@@ -52,7 +52,6 @@ public class TestResources {
         }
     }
 
-    //    public static void main(String[] args) throws JSONException, IOException {
     public static MapGeometry getMadagascar() {
 
         List<String> lines = getLinesFromFile("madagascar.geo.json");

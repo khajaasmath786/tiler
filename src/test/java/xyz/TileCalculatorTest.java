@@ -2,6 +2,8 @@ package xyz;
 
 import com.esri.core.geometry.*;
 import org.junit.Test;
+import xyz.tms.TmsTile;
+import xyz.tms.TmsTileCalculator;
 
 import java.util.List;
 
@@ -12,7 +14,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class TileCalculatorTest {
 
-    private TileCalculator tileCalculator = new TileCalculator();
+    private TmsTileCalculator tileCalculator = new TmsTileCalculator();
 
     @Test
     public void testMadagascar() {
@@ -25,10 +27,10 @@ public class TileCalculatorTest {
         double xmin = env.xmin;
         double ymin = env.ymin;
 
-        TileCalculator.Tile tile = TileCalculator.getTile(xmin, ymin, 6);
+        TmsTile tmsTile = TmsTileCalculator.getTile(xmin, ymin, 6);
 
-        List<TileCalculator.Tile> tiles = TileCalculator.tilesForEnvelope(env, 6);
-        for (TileCalculator.Tile t : tiles) {
+        List<TmsTile> tmsTiles = TmsTileCalculator.tilesForEnvelope(env, 6);
+        for (TmsTile t : tmsTiles) {
 
             Polygon p = t.getEnvelopeAsPolygon();
             System.out.println("p = " + p);

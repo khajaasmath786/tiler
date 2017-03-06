@@ -1,6 +1,7 @@
 package xyz;
 
 import org.junit.Test;
+import xyz.tms.TmsTile;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,16 +13,16 @@ public class TileEncodes {
     @Test
     public void testSerDe() {
 
-        TileCalculator.Tile tile = new TileCalculator.Tile(2,9,3);
-        System.out.println("tile = " + tile);
+        TmsTile tmsTile = new TmsTile(2,9,3);
+        System.out.println("tmsTile = " + tmsTile);
 
-        byte[] encoded = tile.encode();
+        byte[] encoded = tmsTile.encode();
 
-        TileCalculator.Tile decoded = new TileCalculator.Tile(encoded);
+        TmsTile decoded = new TmsTile(encoded);
 
         System.out.println("decoded = " + decoded);
-        assertEquals(tile, decoded);
-        assertEquals(tile.getEnvelope(), decoded.getEnvelope());
+        assertEquals(tmsTile, decoded);
+        assertEquals(tmsTile.getEnvelope(), decoded.getEnvelope());
 
     }
 

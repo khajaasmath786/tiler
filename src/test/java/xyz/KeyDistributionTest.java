@@ -2,6 +2,7 @@ package xyz;
 
 import org.junit.Assert;
 import org.junit.Test;
+import xyz.tms.TmsTile;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -23,12 +24,12 @@ public class KeyDistributionTest {
         int[] Xs = randomInts(nSamples);
         int[] Ys = randomInts(nSamples);
 
-        TileCalculator.Tile[] tiles = new TileCalculator.Tile[nSamples];
+        TmsTile[] tmsTiles = new TmsTile[nSamples];
         for (int i = 0; i < nSamples; i++) {
-            tiles[i] = new TileCalculator.Tile(Xs[i], Ys[i], 14);
+            tmsTiles[i] = new TmsTile(Xs[i], Ys[i], 14);
         }
 
-        testKeyDistribution(tiles);
+        testKeyDistribution(tmsTiles);
 
     }
 
@@ -60,15 +61,15 @@ public class KeyDistributionTest {
 
 
     /**
-     * The tile key from {@link TileCalculator.Tile#encode()} should distribute evenly across all values of it's first byte
-     * @param tiles tiles to test
+     * The tile key from {@link TmsTile#encode()} should distribute evenly across all values of it's first byte
+     * @param tmsTiles tmsTiles to test
      */
-    public void testKeyDistribution(TileCalculator.Tile[] tiles) {
+    public void testKeyDistribution(TmsTile[] tmsTiles) {
 
         long[] freq = new long[256];
 
-        for (TileCalculator.Tile tile : tiles) {
-            byte[] bytes = tile.encode();
+        for (TmsTile tmsTile : tmsTiles) {
+            byte[] bytes = tmsTile.encode();
 
             int unsigned = unsignedToBytes(bytes[0]);
             freq[unsigned] += 1;

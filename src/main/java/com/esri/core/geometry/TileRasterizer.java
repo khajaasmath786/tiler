@@ -1,6 +1,6 @@
 package com.esri.core.geometry;
 
-import xyz.TileCalculator;
+import xyz.tms.TmsTile;
 
 
 /**
@@ -17,15 +17,15 @@ public class TileRasterizer {
 //    private static int height = 256;
     private final TileScanCallback scanCallback;// = new IntbackedScanCallback(width, height);
 
-    public TileRasterizer(TileCalculator.Tile tile, TileScanCallback scanCallback) {
+    public TileRasterizer(TmsTile tmsTile, TileScanCallback scanCallback) {
         this.scanCallback = scanCallback;
         trans.setIdentity(); //reset
-        Envelope2D envelope2D = tile.getEnvelope();
+        Envelope2D envelope2D = tmsTile.getEnvelope();
 
         double xx = -envelope2D.xmin;
         double yy = -envelope2D.ymin;
         trans.shift(xx, yy);
-        double scale = tile.getScale();
+        double scale = tmsTile.getScale();
         trans.scale(scale, scale);
     }
 

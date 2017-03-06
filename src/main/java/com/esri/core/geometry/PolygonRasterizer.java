@@ -1,11 +1,6 @@
 package com.esri.core.geometry;
 
-import xyz.TileCalculator;
-
-import javax.imageio.ImageIO;
-import java.awt.image.*;
-import java.io.IOException;
-import java.io.ByteArrayOutputStream;
+import xyz.tms.TmsTile;
 
 
 /**
@@ -83,15 +78,15 @@ public class PolygonRasterizer {
         rasterizer.flush();
     }
 
-    public byte[] rasterizeTile(Polygon polygon, TileCalculator.Tile tile) {
+    public byte[] rasterizeTile(Polygon polygon, TmsTile tmsTile) {
 
         trans.setIdentity(); //reset
-        Envelope2D envelope2D = tile.getEnvelope();
+        Envelope2D envelope2D = tmsTile.getEnvelope();
 
         double xx = -envelope2D.xmin;
         double yy = -envelope2D.ymin;
         trans.shift(xx, yy);
-        double scale = tile.getScale();
+        double scale = tmsTile.getScale();
         trans.scale(scale, scale);
 
         Envelope2D env = new Envelope2D();

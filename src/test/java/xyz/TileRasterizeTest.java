@@ -26,12 +26,12 @@ public class TileRasterizeTest {
 //        ShapefileGeometryCursor shapeFileReader = getShapefileGeometryCursor();
 //        Envelope2D envelope2D = shapeFileReader.getEnvelope2D();
 //        List<Geometry> lines = getGeometries(shapeFileReader);
-//        List<TileCalculator.Tile> tiles = TileCalculator.tilesForEnvelope(envelope2D, 9);
+//        List<TmsTileCalculator.TmsTile> tiles = TmsTileCalculator.tilesForEnvelope(envelope2D, 9);
 //
 //        double bufferDistance = 0.005;
 //
 //
-//        for (TileCalculator.Tile tile : tiles) {
+//        for (TmsTileCalculator.TmsTile tile : tiles) {
 //            BitsetCompositor bitsetCompositor = new BitsetCompositor(256*256); //THING BEING TESTED
 //
 //            for (Geometry line : lines) {
@@ -56,10 +56,10 @@ public class TileRasterizeTest {
 //        ShapefileGeometryCursor shapeFileReader = getShapefileGeometryCursor();
 //        Envelope2D envelope2D = shapeFileReader.getEnvelope2D();
 //        List<Geometry> lines = getGeometries(shapeFileReader);
-//        List<TileCalculator.Tile> tiles = TileCalculator.tilesForEnvelope(envelope2D, 9);
+//        List<TmsTileCalculator.TmsTile> tiles = TmsTileCalculator.tilesForEnvelope(envelope2D, 9);
 //
 //        double bufferDistance = 0.005;
-//        for (TileCalculator.Tile tile : tiles) {
+//        for (TmsTileCalculator.TmsTile tile : tiles) {
 //
 ////            TileRasterizer tileRasterizer = new TileRasterizer(tile, new IntbackedScanCallback(256, 256));
 //            TileRasterizer tileRasterizer = new TileRasterizer(tile, new BinaryScanCallback(256, 256));
@@ -96,11 +96,11 @@ public class TileRasterizeTest {
 //
 //        Envelope2D env = new Envelope2D();
 //        geometry.queryEnvelope2D(env);
-//        List<TileCalculator.Tile> tiles = TileCalculator.tilesForEnvelope(env, 6);
+//        List<TmsTileCalculator.TmsTile> tiles = TmsTileCalculator.tilesForEnvelope(env, 6);
 //
 //        OperatorIntersects intersectOp = OperatorIntersects.local();
 //
-//        for (TileCalculator.Tile tile : tiles) {
+//        for (TmsTileCalculator.TmsTile tile : tiles) {
 //
 //            Envelope2D envelope2D = tile.getEnvelope();
 ////            geometry.queryEnvelope2D(envelope2D);

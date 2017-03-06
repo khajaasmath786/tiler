@@ -1,6 +1,7 @@
 package xyz;
 
 import com.esri.core.geometry.*;
+import xyz.tms.TmsTile;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,12 +13,11 @@ import java.text.DecimalFormat;
  */
 public class TestUtil {
 
-
     static SpatialReference spatialRef = SpatialReference.create(4326);
 
-    public static void writeDebugTile(TileCalculator.Tile tile, byte[] bytes) throws IOException {
-        System.out.println("writing tile: " + tile);
-        File f = new File("e:/tmp/ras/" + tile.toString() + ".png");
+    public static void writeDebugTile(TmsTile tmsTile, byte[] bytes) throws IOException {
+        System.out.println("writing tmsTile: " + tmsTile);
+        File f = new File("e:/tmp/ras/" + tmsTile.toString() + ".png");
         FileOutputStream fileOutputStream = new FileOutputStream(f);
         for (byte aByte : bytes) {
             fileOutputStream.write(aByte);
