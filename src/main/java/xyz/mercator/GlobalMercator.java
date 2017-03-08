@@ -240,14 +240,14 @@ public abstract class GlobalMercator {
 	 * 
 	 */
 	@Deprecated
-	public double[] tileLatLonBounds(int tx, int ty, int zoom) {
+	public double[] getTileEnvelope(int tx, int ty, int zoom) {
 		double[] bounds = tileBounds(tx, ty, zoom);
 		double[] mins = metersToLatLon(bounds[0], bounds[1]);
 		double[] maxs = metersToLatLon(bounds[2], bounds[3]);
 		return new double[] { mins[0], mins[1], maxs[0], maxs[1] };
 	}
 
-	public Envelope2D tileLatLonBounds(MercatorTile tile) {
+	public Envelope2D getTileEnvelope(MercatorTile tile) {
 
 		double[] bounds = tileBounds(tile.x, tile.y, tile.z);
 		double[] ll = metersToLatLon(bounds[0], bounds[1]);
@@ -328,10 +328,22 @@ public abstract class GlobalMercator {
      * @param zoom
      * @return
      */
-	public MercatorTile mercatorTile(double lon, double lat, int zoom) {
+	public MercatorTile tileForCoordinate(double lon, double lat, int zoom) {
         double[] meters = LatLonToMeters(lat, lon);
         int[] tile = MetersToTile(meters[0], meters[1], zoom);
         return new MercatorTile(tile[0], tile[1], zoom);
+    }
+
+    /*
+    Version which modifies an existing object
+     */
+    public MercatorTile tileForCoordinate(double lon, double lat, int zoom, MercatorTile mercatorTile) {
+        double[] meters = LatLonToMeters(lat, lon);
+        int[] tile = MetersToTile(meters[0], meters[1], zoom);
+        mercatorTile.x = tile[0];
+        mercatorTile.y = tile[1];
+        mercatorTile.z = zoom;
+        return mercatorTile;
     }
 
 	/**

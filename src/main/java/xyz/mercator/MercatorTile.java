@@ -8,6 +8,10 @@ public class MercatorTile {
     public int y;
     public int z;
 
+    public MercatorTile() {
+
+    }
+
     public MercatorTile(int x, int y, int z) {
         this.x = x;
         this.y = y;
@@ -16,6 +20,6 @@ public class MercatorTile {
 
     @Override
     public String toString() {
-        return x + ":" + y + ":" + z;
+        return String.format("%s:%s:%s", x, y, z);
     }
 }

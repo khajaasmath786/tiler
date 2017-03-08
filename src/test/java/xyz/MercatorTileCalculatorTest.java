@@ -4,7 +4,6 @@ import com.esri.core.geometry.*;
 import org.junit.Test;
 import xyz.mercator.MercatorTile;
 import xyz.mercator.MercatorTileCalculator;
-import xyz.tms.TmsTile;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,7 +42,7 @@ public class MercatorTileCalculatorTest {
             printWriter.write("        \"geometry\":\n");
 
 //            Polygon p = t.getEnvelopeAsPolygon();
-            Envelope2D env2d = tileCalculator.tileLatLonBounds(t);
+            Envelope2D env2d = tileCalculator.getTileEnvelope(t);
             Polygon p = envToPoly(env2d);
 
             String execute = OperatorExportToGeoJson.local().execute(0, madagascar.getSpatialReference(), p);

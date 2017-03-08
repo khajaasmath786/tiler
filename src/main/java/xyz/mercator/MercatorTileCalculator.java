@@ -1,7 +1,6 @@
 package xyz.mercator;
 
 import com.esri.core.geometry.Envelope2D;
-import com.esri.core.geometry.Polygon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +23,8 @@ public class MercatorTileCalculator extends GlobalMercator {
         double xmax = env.xmax;
         double ymax = env.ymax;
 
-        MercatorTile ul = mercatorTile(xmin, ymax, zoom);
-        MercatorTile lr = mercatorTile(xmax, ymin, zoom);
+        MercatorTile ul = tileForCoordinate(xmin, ymax, zoom);
+        MercatorTile lr = tileForCoordinate(xmax, ymin, zoom);
 
         /*
         Could put tmsTiles in array or provide zipped vectors
