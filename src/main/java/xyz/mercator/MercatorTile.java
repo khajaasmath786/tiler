@@ -8,9 +8,7 @@ public class MercatorTile {
     public int y;
     public int z;
 
-    public MercatorTile() {
-
-    }
+    public MercatorTile() { }
 
     public MercatorTile(int x, int y, int z) {
         this.x = x;
