@@ -54,7 +54,7 @@ public class MercatorTileCalculatorTest {
 
 //            printWriter.write("        \"id\": " + i + ",\n");
             printWriter.write("        \"properties\": {\n");
-            printWriter.write("            \"zoom\": \"" + t.z + "\"\n");
+            printWriter.write("            \"zoom\": \"" + t.getZ() + "\"\n");
             printWriter.write("          }\n");
             printWriter.write("        }\n");
             if (i < mercatorTiles.size() - 1) {

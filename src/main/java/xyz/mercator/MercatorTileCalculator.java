@@ -10,8 +10,6 @@ import java.util.List;
  */
 public class MercatorTileCalculator extends GlobalMercator {
 
-//    private GlobalMercator globalMercator = new GlobalMercator();
-
     public List<MercatorTile> tilesForEnvelope(Envelope2D env, int zoom) {
 
         /*
@@ -32,8 +30,8 @@ public class MercatorTileCalculator extends GlobalMercator {
         List<MercatorTile> mercatorTiles = new ArrayList<>();
 
         //iterate ll to ur
-        for (int i = ul.x; i <= lr.x; i++) {
-            for (int j = lr.y; j <= ul.y; j++) {
+        for (int i = ul.getX(); i <= lr.getX(); i++) {
+            for (int j = lr.getY(); j <= ul.getY(); j++) {
                 System.out.println("i = " + i);
                 System.out.println("j = " + j);
                 mercatorTiles.add(new MercatorTile(i, j, zoom));

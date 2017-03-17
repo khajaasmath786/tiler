@@ -249,7 +249,7 @@ public abstract class GlobalMercator {
 
 	public Envelope2D getTileEnvelope(MercatorTile tile) {
 
-		double[] bounds = tileBounds(tile.x, tile.y, tile.z);
+		double[] bounds = tileBounds(tile.getX(), tile.getY(), tile.getZ());
 		double[] ll = metersToLatLon(bounds[0], bounds[1]);
 		double[] ur = metersToLatLon(bounds[2], bounds[3]);
 		return  new Envelope2D(ll[1], ll[0], ur[1], ur[0]);

@@ -1,11 +1,13 @@
 package xyz;
 
 import com.esri.core.geometry.*;
-import xyz.tms.TmsTile;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
 
 /**
@@ -15,7 +17,8 @@ public class TestUtil {
 
     static SpatialReference spatialRef = SpatialReference.create(4326);
 
-    public static void writeDebugTile(TmsTile tmsTile, byte[] bytes) throws IOException {
+
+    public static void writeDebugTile(Tile tmsTile, byte[] bytes) throws IOException {
         System.out.println("writing tmsTile: " + tmsTile);
         File f = new File("e:/tmp/ras/" + tmsTile.toString() + ".png");
         FileOutputStream fileOutputStream = new FileOutputStream(f);

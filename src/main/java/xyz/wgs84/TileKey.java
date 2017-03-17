@@ -9,7 +9,7 @@ import com.esri.core.geometry.Envelope2D;
  */
 public class TileKey {
 
-    private final double[] pixelScales = new double[2];
+    private final double[] pixelSize = new double[2];
     private final double[] origin = new double[2];
     private final int[] dimensions = new int[2];
     private int proj = 0;
@@ -20,8 +20,8 @@ public class TileKey {
 
         double yTop = origin[1];
         double xLeft = origin[0];
-        double xRight = xLeft + (pixelScales[0] * dimensions[0]);
-        double yBottom = yTop - (pixelScales[1] * dimensions[1]);
+        double xRight = xLeft + (pixelSize[0] * dimensions[0]);
+        double yBottom = yTop - (pixelSize[1] * dimensions[1]);
 
         return new Envelope2D(xLeft, yBottom, xRight, yTop);
     }
@@ -36,9 +36,9 @@ public class TileKey {
         this.origin[1] = y;
     }
 
-    public void setPixelScales(double x, double y) {
-        this.pixelScales[0] = x;
-        this.pixelScales[1] = y;
+    public void setPixelSize(double x, double y) {
+        this.pixelSize[0] = x;
+        this.pixelSize[1] = y;
     }
 
     public double getOriginX() {
@@ -48,12 +48,12 @@ public class TileKey {
         return origin[1];
     }
 
-    public double getPixelScaleX() {
-        return pixelScales[0];
+    public double getPixelSizeX() {
+        return pixelSize[0];
     }
 
-    public double getPixelScaleY() {
-        return pixelScales[1];
+    public double getPixelSizeY() {
+        return pixelSize[1];
     }
 
     public int getWidth() {

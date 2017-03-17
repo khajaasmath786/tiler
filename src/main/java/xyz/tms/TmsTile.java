@@ -2,13 +2,14 @@ package xyz.tms;
 
 import com.esri.core.geometry.Envelope2D;
 import com.esri.core.geometry.Polygon;
+import xyz.Tile;
 
 import java.nio.ByteBuffer;
 
 /**
  * Created by willtemperley@gmail.com on 19-Jan-17.
  */
-public class TmsTile {
+public class TmsTile implements Tile {
 
     public static byte[] cf = "d".getBytes();
     public static byte[] cimg = "i".getBytes();
@@ -16,9 +17,13 @@ public class TmsTile {
     private static final int w = 256;
     private static final int h = 256;
 
-    private final int x;
-    private final int y;
+    private int x;
+    private int y;
     private int z;
+
+    public TmsTile() {
+        x = 0; y = 0; z = 0;
+    }
 
     public TmsTile(int x, int y, int z) {
         this.x = x;
@@ -132,15 +137,33 @@ public class TmsTile {
         return (180D / (1 << z)) * y - 90;
     }
 
+    @Override
     public int getX() {
         return x;
     }
 
+    @Override
     public int getY() {
         return y;
     }
 
+    @Override
     public int getZ() {
         return z;
+    }
+
+    @Override
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    @Override
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    @Override
+    public void setZ(int z) {
+        this.z = z;
     }
 }
