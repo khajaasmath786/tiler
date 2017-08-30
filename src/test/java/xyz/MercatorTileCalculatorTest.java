@@ -11,6 +11,8 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.List;
 
+import static xyz.GeometryUtils.envToPoly;
+
 /**
  * Created by willtemperley@gmail.com on 24-Oct-16.
  */
@@ -68,22 +70,5 @@ public class MercatorTileCalculatorTest {
         printWriter.close();
     }
 
-    private Polygon envToPoly(Envelope2D env) {
-
-        Polygon p = new Polygon();
-        Point2D lowerLeft = env.getLowerLeft();
-        Point2D upperRight = env.getUpperRight();
-        double x = lowerLeft.x;
-        double y = lowerLeft.y;
-        double x1 = upperRight.x;
-        double y1 = upperRight.y;
-
-        p.startPath(x, y);
-        p.lineTo(x1, y);
-        p.lineTo(x1, y1);
-        p.lineTo(x, y1);
-        p.closePathWithLine();
-        return p;
-    }
 
 }

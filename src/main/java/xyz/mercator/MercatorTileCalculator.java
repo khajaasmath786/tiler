@@ -32,8 +32,6 @@ public class MercatorTileCalculator extends GlobalMercator {
         //iterate ll to ur
         for (int i = ul.getX(); i <= lr.getX(); i++) {
             for (int j = lr.getY(); j <= ul.getY(); j++) {
-                System.out.println("i = " + i);
-                System.out.println("j = " + j);
                 mercatorTiles.add(new MercatorTile(i, j, zoom));
             }
         }
